@@ -29,6 +29,10 @@ index 9cf754a..f9e10e0
         <a name="top"></a>
         <!-- header -->
         <!-- header-vtiger crm name & RSS -->
+@@ -62,4 +62,2 @@
+       
+-             <script type="text/javascript" src="include/jquery/jquery-1.6.2.min.js"></script>
++             <script type="text/javascript" src="Smarty/angular/jquery-1.9.1.js"></script>
 
 diff --git a/Smarty/templates/DetailView.tpl b/Smarty/templates/DetailView.tpl
 index d1048ae..68f85ef 100755
