@@ -112,7 +112,7 @@ elseif($kaction=='add'){
                 \$ng_module=\$adb->query_result(\$a,0,'module_name');
                 \$pointing_field_name=\$adb->query_result(\$a,0,'pointing_field_name');
                     
-                if(\$sort!=''){
+                if(!empty(\$sort) && \$sort!= null && \$sort!= ' '){
                 \$so= explode(\",\",\$sort);    
                 \$sort_by=\$so[0]; 
                 \$order=\$so[1];

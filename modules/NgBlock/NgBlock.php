@@ -54,7 +54,7 @@ class NgBlock {
                     $pointing_block_name=$adb->query_result($result,0,'pointing_block_name');
                     $lbl_block_name=array_search($context['header'],$context['MOD']);
                    
-                    if($lbl_block_name==$pointing_block_name){
+                    if($lbl_block_name==$pointing_block_name || $context['header']==$pointing_block_name){
 			require_once dirname(__FILE__) . '/DetailViewBlockNg.php';
 			return (new NgBlock_DetailViewBlockNgWidget($id));
                     }
