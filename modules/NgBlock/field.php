@@ -25,7 +25,7 @@
       $content[$i]['columnname']=$adb->query_result($query,$i,'columnname');
       $content[$i]['block']=$adb->query_result($query,$i,'block');
       $content[$i]['tabid']=$adb->query_result($query,$i,'tabid');
-      if(strpos($selected,$content[$i]['fieldname'])!==false)
+      if(strpos($selected,$content[$i]['columnname'])!==false)
       $content[$i]['ticked']=true;
  
       }
