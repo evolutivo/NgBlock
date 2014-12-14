@@ -78,7 +78,7 @@
 </table>
 </div>
 
-<script type="text/ng-template" id="DetailViewBlockNgEdit.html">
+<script type="text/ng-template" id="DetailViewBlockNgEdit{$NG_BLOCK_ID}.html">
 
 <div class="modal-header">
     <h4 class="modal-title">{literal}{{Action}}{/literal} {$POINTING_MODULE} {literal}{{user.name}}{/literal}</h4>
@@ -142,8 +142,8 @@ angular.module('cbApp')
 
       $scope.open = function (user,type) {
         var modalInstance = $modal.open({
-          templateUrl: 'DetailViewBlockNgEdit.html',
-          controller: 'ModalInstanceCtrl',
+          templateUrl: 'DetailViewBlockNgEdit{/literal}{$NG_BLOCK_ID}{literal}.html',
+          controller: 'ModalInstanceCtrl{/literal}{$NG_BLOCK_ID}{literal}',
           resolve: {
             user :function () {
               return user;
@@ -166,7 +166,7 @@ angular.module('cbApp')
 
 })
 
-.controller('ModalInstanceCtrl',function ($scope,$http,$modalInstance,user,type,tbl) {
+.controller('ModalInstanceCtrl{/literal}{$NG_BLOCK_ID}{literal}',function ($scope,$http,$modalInstance,user,type,tbl) {
 
       $scope.user = user;
       $scope.selected = {
