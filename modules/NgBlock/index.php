@@ -145,6 +145,11 @@ elseif($kaction=='add'){
                     \$key_id=  array_search('modifiedtime',\$col);
                     unset(\$col[\$key_id]);
                 }
+                if(in_array('description', \$col))
+                {
+                    \$key_id=  array_search('description',\$col);
+                    unset(\$col[\$key_id]);
+                }
    
                 \$col2=implode(\",\$pointing_module_table.\",\$col);
                  
@@ -164,7 +169,7 @@ elseif($kaction=='add'){
                     \$log->debug('alb6 '.\" 
                           SELECT \$pointing_module_table.\$pointing_module_id,
                           \$pointing_module_table.\$col2,\$pointing_module_table.\$entityname
-                          ,vtiger_crmentity.smownerid,vtiger_crmentity.createdtime,vtiger_crmentity.modifiedtime
+                          ,vtiger_crmentity.smownerid,vtiger_crmentity.createdtime,vtiger_crmentity.modifiedtime,vtiger_crmentity.description
                           FROM \$ng_module_table
                           join \$pointing_module_table on \$ng_module_table.\$ng_module_id = \$pointing_module_table.\$pointing_module_field
                           join vtiger_crmentity on crmid = \$pointing_module_table.\$pointing_module_id
@@ -174,7 +179,7 @@ elseif($kaction=='add'){
                     \$query=\$adb->pquery(\" 
                           SELECT \$pointing_module_table.\$pointing_module_id,
                           \$pointing_module_table.\$col2,\$pointing_module_table.\$entityname
-                          ,vtiger_crmentity.smownerid,vtiger_crmentity.createdtime,vtiger_crmentity.modifiedtime
+                          ,vtiger_crmentity.smownerid,vtiger_crmentity.createdtime,vtiger_crmentity.modifiedtime,vtiger_crmentity.description
                           FROM \$ng_module_table
                           join \$pointing_module_table on \$ng_module_table.\$ng_module_id = \$pointing_module_table.\$pointing_module_field
                           join vtiger_crmentity on crmid = \$pointing_module_table.\$pointing_module_id
@@ -189,6 +194,8 @@ elseif($kaction=='add'){
                        {   array_push(\$col,'createdtime');}
                        if(strpos(\$columns,'modifiedtime')!==false)
                        {   array_push(\$col,'modifiedtime');}
+                       if(strpos(\$columns,'description')!==false)
+                       {   array_push(\$col,'description');}
 
                        // var_dump(\$col); 
 
@@ -212,6 +219,8 @@ elseif($kaction=='add'){
                            {   array_push(\$col,'createdtime');}
                            if(strpos(\$columns,'modifiedtime')!==false)
                            {   array_push(\$col,'modifiedtime');}
+                           if(strpos(\$columns,'description')!==false)
+                           {   array_push(\$col,'description');}
                                
                           for(\$j=0;\$j<sizeof(\$col);\$j++)
                           {
