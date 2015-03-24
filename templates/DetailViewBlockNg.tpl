@@ -1,3 +1,4 @@
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 <table border=0 cellspacing=0 cellpadding=0 width=100% class="small">
 <tr>
         <td>&nbsp;</td>
@@ -33,7 +34,7 @@
                 {math equation="x+1" x=$FIELD_LABEL|@count assign="nr_col"} 
                 <td colspan="{$nr_col}">
                     <img width="20" height="20" ng-click="open(user,'create')" src="themes/softed/images/btnL3Add.gif" />
-                    <a ng-click="open(user,'create')">Add New {$POINTING_MODULE}</a> 
+                        <a ng-click="open(user,'create')">Add New {$NG_BLOCK_NAME}</a> &nbsp;&nbsp;&nbsp;
                 </td> 
             </tr>
             {/if}
@@ -45,15 +46,19 @@
             </tr>
             <tr ng-repeat="user in $data"  class="dvtCellInfo">
                 {foreach key=index item=fieldname from=$COLUMN_NAME} 
-                  {if $index eq 0}
-                      <td >
-                         <a href="{literal}{{user.href}}{/literal}">{literal}{{user.{/literal}{$fieldname}{literal}}}{/literal}</a>
-                      </td> 
-                  {else}
-                      <td > 
-                          {literal}  {{user.{/literal}{$fieldname}{literal}}}{/literal}
-                      </td>
-                  {/if}
+                      {if $index eq 0}
+                          <td >
+                             <a href="{literal}{{user.href}}{/literal}">{literal}{{user.{/literal}{$fieldname}{literal}}}{/literal}</a>
+                          </td> 
+                      {else}
+                          <td > 
+                              {if in_array($FIELD_UITYPE.$index,array(10,51,50,73,68,57,59,58,76,75,81,78,80) )}
+                                  {literal}  {{user.{/literal}{$fieldname}_display{literal}}}{/literal}
+                              {else}
+                                  {literal}  {{user.{/literal}{$fieldname}{literal}}}{/literal}
+                              {/if}
+                          </td>
+                      {/if}
                 {/foreach} 
                 <td  width="80" >
                 <table>
@@ -78,7 +83,7 @@
 </table>
 </div>
 
-<script type="text/ng-template" id="DetailViewBlockNgEdit.html">
+<script type="text/ng-template" id="DetailViewBlockNgEdit{$NG_BLOCK_ID}.html">
 
 <div class="modal-header">
     <h4 class="modal-title">{literal}{{Action}}{/literal} {$POINTING_MODULE} {literal}{{user.name}}{/literal}</h4>
@@ -91,10 +96,19 @@
               {$FIELD_LABEL.$index}
           </td>
           <td style="text-align:left;"> 
+          {if $FIELD_UITYPE.$index eq '15'}
+              <select class="form-control" ng-model="user.{$fieldname}"  ng-options="op for op  in opt.{$index}"></select>
+          {elseif in_array($FIELD_UITYPE.$index,array(10,51,50,73,68,57,59,58,76,75,81,78,80) )  }
+              <input class="form-control" style="width:250px;" type="hidden" id="{$fieldname}" ng-model="user.{$fieldname}" value="user.{$fieldname}"/>
+              <input class="form-control" style="width:250px;" type="text" id="{$fieldname}_display" ng-model="user.{$fieldname}_display" value="user.{$fieldname}_display" onchange="alert(this.value);"/>
+              <img src="{'select.gif'|@vtiger_imageurl:$THEME}"
+    alt="Select" title="Select" LANGUAGE=javascript  onclick='return window.open("index.php?module={$REL_MODULE.$index}&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield={$fieldname}&srcmodule={$POINTING_MODULE}&responseTo=ngBlockPopup","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>
+          {else}
               <input class="form-control" style="width:350px;" type="text" ng-model="user.{$fieldname}"/>
-          </td>
+          {/if}
+           </td>
       </tr>
-    {/foreach} 
+    {/foreach}
     </table>
 </div>
 <div class="modal-footer">
@@ -102,7 +116,14 @@
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
 </script>
-
+<style>
+{literal}
+.app-modal-window .modal-dialog {
+    width: 500px;
+    margin-left:-190px;
+    }
+{/literal}
+</style>
 <script>
 {literal}
 angular.module('cbApp')
@@ -142,8 +163,10 @@ angular.module('cbApp')
 
       $scope.open = function (user,type) {
         var modalInstance = $modal.open({
-          templateUrl: 'DetailViewBlockNgEdit.html',
-          controller: 'ModalInstanceCtrl',
+          templateUrl: 'DetailViewBlockNgEdit{/literal}{$NG_BLOCK_ID}{literal}.html',
+          controller: 'ModalInstanceCtrl{/literal}{$NG_BLOCK_ID}{literal}',
+          windowClass: 'app-modal-window',
+          //backdrop: "static",
           resolve: {
             user :function () {
               return user;
@@ -166,16 +189,27 @@ angular.module('cbApp')
 
 })
 
-.controller('ModalInstanceCtrl',function ($scope,$http,$modalInstance,user,type,tbl) {
+.controller('ModalInstanceCtrl{/literal}{$NG_BLOCK_ID}{literal}',function ($scope,$http,$modalInstance,user,type,tbl) {
 
       $scope.user = user;
       $scope.selected = {
         item: 0
       };
       $scope.Action = (type === 'create' ? 'Create' : 'Edit');
+      $scope.opt={/literal}{$OPTIONS}{literal}; 
       
       // edit selected record
       $scope.setEditId =  function(user) {
+      {/literal}
+      {foreach key=index item=fieldname from=$COLUMN_NAME} 
+          {if in_array($FIELD_UITYPE.$index,array(10,51,50,73,68,57,59,58,76,75,81,78,80) )  }
+              if(document.getElementById("{$fieldname}").value!='user.{$fieldname}')
+                  user.{$fieldname}=document.getElementById("{$fieldname}").value;
+              
+          {/if}
+      {/foreach}
+      {literal}
+            
             user.href='';
             user =JSON.stringify(user);
             $http.post('index.php?{/literal}{$blockURL}{literal}&kaction='+type+'&models='+user

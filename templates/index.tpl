@@ -6,7 +6,7 @@
 <script src="Smarty/angular/angular-multi-select.js"></script>  
 <link rel="stylesheet" href="Smarty/angular/angular-multi-select.css">
 
-<table  width="100%" width=98% align=center border="0" >
+<table  width="100%" width=98% align=center border="0" ng-app="cbApp">
     <tr><td style="height:2px"><br/><br/></td></tr>
     <tr>
         <td style="padding-left:20px;padding-right:50px" class="moduleName" nowrap colspan="2">
@@ -122,7 +122,7 @@
 
 <script>
 {literal}
-angular.module('cbApp') 
+angular.module('cbApp',['ngTable','ui.bootstrap','multi-select']) 
 .controller('ng_Block', function($scope, $http, $modal, ngTableParams) {
 
             $scope.new_user={"id":"","id_hidden":"","name":"","module_name":"",
@@ -164,6 +164,15 @@ angular.module('cbApp')
             }
             
               $scope.open = function (us,type) {
+                  if(type=='add'){
+                     us= {"id":"","id_hidden":"","name":"","module_name":"",
+                            "module_name_trans":"","pointing_block_name":"",
+                            "pointing_block_name_trans":"","pointing_module_name":"",
+                            "pointing_module_name_trans":"","pointing_field_name":"",
+                            "pointing_field_name_trans":"","columns":"","cond":"",
+                            "paginate":"","nr_page":"","add_record":"",
+                            "sort":" ","edit_record":"","delete_record":""};
+                  }
                 var modalInstance = $modal.open({
                   templateUrl: 'Smarty/templates/modules/NgBlock/edit_modal.html',
                   controller: 'ModalInstanceCtrl',
@@ -200,23 +209,27 @@ angular.module('cbApp')
       $scope.Action = (type === 'add' ? 'Create' : 'Edit');
       
       $scope.module_sel=[];
+      $scope.blocks=[];
+      $scope.pointing_field=[];
+      $scope.mod_sel={'tablabel':$scope.user.module_name,'tabid':$scope.user.module_id};
+      $scope.pointing_module_name_sel={'tablabel':$scope.user.pointing_module_name};
+      $scope.pointing_block_name_sel={'label':$scope.user.pointing_block_name};
+      $scope.pointing_field_name_sel={'columnname':$scope.user.pointing_field_name};
+      
       $http.get('index.php?module=NgBlock&action=NgBlockAjax&file=relation&kaction=retrieve').
                     success(function(data, status) {
                       $scope.modules = data;
-                      $scope.mod_sel={'tablabel':$scope.user.module_name};
-                      $scope.pointing_module_name_sel={'tablabel':$scope.user.pointing_module_name};
       });
       $http.get('index.php?module=NgBlock&action=NgBlockAjax&file=block&kaction=retrieve').
                     success(function(data, status) {
                       $scope.blocks = data;
-                      $scope.pointing_block_name_sel={'label':$scope.user.pointing_block_name};
       });
       $http.get('index.php?module=NgBlock&action=NgBlockAjax&file=pointing_field_name&kaction=retrieve').
                     success(function(data, status) {
                       $scope.pointing_field = data;
-                      $scope.pointing_field_name_sel={'columnname':$scope.user.pointing_field_name};
       });
-                // edit selected record
+     
+      // edit selected record
       $scope.setEditId =  function(user) {
             user =JSON.stringify(user);
             $http.post('index.php?module=NgBlock&action=NgBlockAjax&file=index&kaction='+type+'&models='+user
@@ -275,5 +288,31 @@ angular.module('cbApp')
         $modalInstance.dismiss('cancel');
       };
 });
+angular.module('cbApp')
+    .filter('filter_blocks', function() {
+          return function(blocks,user) {
+            var filterEvent = [];
+            for (var i = 0;i < blocks.length; i++){
+                if(blocks[i]['tablabel']==user.module_name){
+                    filterEvent.push(blocks[i]);
+                }
+            }
+            return filterEvent;
+        }
+    }
+    );
+angular.module('cbApp')
+.filter('filter_pointing_fields', function() {
+      return function(pointing_field,user) {
+        var filterEvent = [];
+        for (var i = 0;i < pointing_field.length; i++){
+            if(pointing_field[i]['tablabel']==user.pointing_module_name){
+                filterEvent.push(pointing_field[i]);
+            }
+        }
+        return filterEvent;
+    }
+}
+);
 {/literal}
 </script>

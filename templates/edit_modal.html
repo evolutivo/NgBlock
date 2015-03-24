@@ -24,7 +24,7 @@
                 Pointing Block
             </td> 
             <td> 
-                <select class="form-control" ng-click="user.pointing_block_name=pointing_block_name_sel.label" ng-model="pointing_block_name_sel" ng-options="opt.label2 for opt  in ( blocks | filter:{ tabid : mod_sel.tabid }:true ) track by opt.label"></select>
+                <select class="form-control" ng-click="user.pointing_block_name=pointing_block_name_sel.label" ng-model="pointing_block_name_sel" ng-options="opt.label2 for opt  in  blocks | filter_blocks:user  track by opt.label"></select>
             </td> 
         </tr>
         <tr>
@@ -40,7 +40,7 @@
                 Pointing Field
             </td> 
             <td> 
-                <select class="form-control" ng-click="user.pointing_field_name=pointing_field_name_sel.columnname" ng-model="pointing_field_name_sel" ng-options="opt.fieldlabel for opt  in ( pointing_field | filter:{ tabid : pointing_module_name_sel.tabid }:true ) track by opt.columnname"></select>
+                <select class="form-control" ng-click="user.pointing_field_name=pointing_field_name_sel.columnname" ng-model="pointing_field_name_sel" ng-options="opt.fieldlabel for opt  in  pointing_field | filter_pointing_fields:user track by opt.columnname"></select>
              </td> 
         </tr>
         <tr>
