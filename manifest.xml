@@ -48,8 +48,8 @@
   `edit_record` varchar(50) DEFAULT NULL,
   `delete_record` varchar(50) DEFAULT NULL,
   `sequence_ngblock` VARCHAR( 50 ) DEFAULT NULL ,
- `destination` VARCHAR( 50 ) DEFAULT NULL ,
- `type` VARCHAR( 50 ) DEFAULT NULL ,
+  `destination` VARCHAR( 50 ) DEFAULT NULL ,
+  `type` VARCHAR( 50 ) DEFAULT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8]]></sql>
 </table>
